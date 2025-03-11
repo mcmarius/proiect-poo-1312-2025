@@ -23,7 +23,7 @@ public:
         std::cout << "cc student " << nume << std::endl;
     }
 
-    Student & operator=(const Student &other) {
+    Student &operator=(const Student &other) {
         if (this == &other)
             return *this;
         nume = other.nume;
@@ -36,14 +36,7 @@ public:
         std::cout << "destr student " << nume << std::endl;
     }
 
-    [[nodiscard]] const std::string & get_nume() const {
-        return nume;
-    }
-
-    [[nodiscard]] const std::unordered_map<std::string, int> & get_note() const {
-        return note;
-    }
-    friend std::ostream& operator<<(std::ostream& os, const Student& student);
+    friend std::ostream &operator<<(std::ostream &os, const Student &student);
 };
 
 class Profesor {
@@ -56,9 +49,9 @@ public:
           materii(materii) {
     }
 
-    friend std::ostream & operator<<(std::ostream &os, const Profesor &prof) {
+    friend std::ostream &operator<<(std::ostream &os, const Profesor &prof) {
         os << "nume: " << prof.nume << " materii:\n";
-        for (const auto& materie : prof.materii) {
+        for (const auto &materie: prof.materii) {
             os << materie << "\n";
         }
         return os;
@@ -78,17 +71,16 @@ public:
     }
 
     Facultate(const std::string &nume, const std::vector<Student> &studenti,
-        const std::vector<Profesor> &profi)
+              const std::vector<Profesor> &profi)
         : nume(nume),
           studenti(studenti),
           profi(profi) {
     }
-
 };
 
-std::ostream& operator<<(std::ostream& os, const Student& student) {
+std::ostream &operator<<(std::ostream &os, const Student &student) {
     os << student.nume << ":\n";
-    for (const auto& [materie, nota] : student.note) {
+    for (const auto &[materie, nota]: student.note) {
         os << materie << ": " << nota << "\n";
     }
     os << std::endl;
