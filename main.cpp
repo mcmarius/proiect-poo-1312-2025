@@ -13,12 +13,16 @@ class Student {
 
 public:
     friend std::size_t hash_value(const Student &obj);
+
     bool operator==(const Student &) const = default;
+
     bool operator!=(const Student &) const = default;
+
     Student() = default;
-    Student(const std::string& nume,
-        const std::unordered_map<std::string,
-        int> &note)
+
+    Student(const std::string &nume,
+            const std::unordered_map<std::string,
+                int> &note)
         : nume(nume),
           note(note) {
         std::cout << "constr init student " << nume << std::endl;
@@ -49,14 +53,15 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const Student &student);
 
     bool trece() {
-        for (const auto& [nume_materie, nota] : note) {
+        for (const auto &[nume_materie, nota]: note) {
             if (nota < 5)
                 return false;
         }
         an++;
         return true;
     }
-    std::ostream& operator<<(std::ostream &os) const {
+
+    std::ostream &operator<<(std::ostream &os) const {
         os << "student " << nume << std::endl;
         return os;
     }
@@ -107,9 +112,9 @@ public:
           profi(profi) {
     }
 
-    friend std::ostream & operator<<(std::ostream &os, const Facultate &facultate) {
+    friend std::ostream &operator<<(std::ostream &os, const Facultate &facultate) {
         os << "nume: " << facultate.nume << " studenti: ";
-        for (auto &student : facultate.studenti) {
+        for (const auto &student: facultate.studenti) {
             // student.trece();
             os << student;
         }
@@ -127,12 +132,13 @@ std::ostream &operator<<(std::ostream &os, const Student &student) {
 }
 
 int main() {
-    [[maybe_unused]] auto hsh = [](const Student& st) { return hash_value(st); };
+    [[maybe_unused]] auto hsh = [](const Student &st) { return hash_value(st); };
     std::unordered_map<Student, int, decltype(hsh)> studenti;
     Student st1("abc", {{"oop", 10}}), st2{"def", {}};
     std::cout << st1 << st2 << std::endl;
     // st2 << (st1 << (std::cout));
-    studenti[st1] = 1;
+    if (st1.trece())
+        studenti[st1] = 1;
     studenti[st2] = 3;
     std::cout << "Nu mai e mult până la pauză\n";
     // operator<<(std::cout, "Nu mai e mult până la pauză\n");
