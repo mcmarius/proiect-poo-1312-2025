@@ -2,24 +2,33 @@
 #include <array>
 
 #include <Helper.h>
-#include <ostream>
 #include <unordered_map>
 #include <vector>
 
 class Student {
     std::string nume;
     std::unordered_map<std::string, int> note;
+    int an{1};
+    const int id = 1;
 
 public:
-    Student(const std::string &nume, const std::unordered_map<std::string, int> &note)
+    friend std::size_t hash_value(const Student &obj);
+    bool operator==(const Student &) const = default;
+    bool operator!=(const Student &) const = default;
+    Student() = default;
+    Student(const std::string& nume,
+        const std::unordered_map<std::string,
+        int> &note)
         : nume(nume),
           note(note) {
         std::cout << "constr init student " << nume << std::endl;
     }
 
+
     Student(const Student &other)
         : nume(other.nume),
-          note(other.note) {
+          note(other.note),
+          an(other.an), id(other.id) {
         std::cout << "cc student " << nume << std::endl;
     }
 
@@ -28,6 +37,7 @@ public:
             return *this;
         nume = other.nume;
         note = other.note;
+        an = other.an;
         std::cout << "op= student " << nume << std::endl;
         return *this;
     }
@@ -37,12 +47,32 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Student &student);
+
+    bool trece() {
+        for (const auto& [nume_materie, nota] : note) {
+            if (nota < 5)
+                return false;
+        }
+        an++;
+        return true;
+    }
+    std::ostream& operator<<(std::ostream &os) const {
+        os << "student " << nume << std::endl;
+        return os;
+    }
 };
 
+std::size_t hash_value(const Student &obj) {
+    std::size_t seed = 0x36E05842;
+    seed ^= (seed << 6) + (seed >> 2) + 0x1E6FF02C + std::hash<std::string>{}(obj.nume);
+    // seed ^= (seed << 6) + (seed >> 2) + 0x35E8E29B + std::hash{}(obj.note);
+    seed ^= (seed << 6) + (seed >> 2) + 0x1B9FFE06 + static_cast<std::size_t>(obj.an);
+    seed ^= (seed << 6) + (seed >> 2) + 0x751C4A44 + static_cast<std::size_t>(obj.id);
+    return seed;
+}
 class Profesor {
     std::string nume;
     std::vector<std::string> materii;
-
 public:
     Profesor(const std::string &nume, const std::vector<std::string> &materii)
         : nume(nume),
@@ -76,6 +106,15 @@ public:
           studenti(studenti),
           profi(profi) {
     }
+
+    friend std::ostream & operator<<(std::ostream &os, const Facultate &facultate) {
+        os << "nume: " << facultate.nume << " studenti: ";
+        for (auto &student : facultate.studenti) {
+            // student.trece();
+            os << student;
+        }
+        return os;
+    }
 };
 
 std::ostream &operator<<(std::ostream &os, const Student &student) {
@@ -88,9 +127,13 @@ std::ostream &operator<<(std::ostream &os, const Student &student) {
 }
 
 int main() {
+    [[maybe_unused]] auto hsh = [](const Student& st) { return hash_value(st); };
+    std::unordered_map<Student, int, decltype(hsh)> studenti;
     Student st1("abc", {{"oop", 10}}), st2{"def", {}};
     std::cout << st1 << st2 << std::endl;
-
+    // st2 << (st1 << (std::cout));
+    studenti[st1] = 1;
+    studenti[st2] = 3;
     std::cout << "Nu mai e mult până la pauză\n";
     // operator<<(std::cout, "Nu mai e mult până la pauză\n");
     std::array<int, 100> v{};
