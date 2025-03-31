@@ -5,133 +5,18 @@
 #include <unordered_map>
 #include <vector>
 
-class Student {
-    std::string nume;
-    std::unordered_map<std::string, int> note;
-    int an{1};
-    const int id = 1;
+#include "Profesor.h"
+#include "Student.h"
 
-public:
-    friend std::size_t hash_value(const Student &obj);
-
-    bool operator==(const Student &) const = default;
-
-    bool operator!=(const Student &) const = default;
-
-    Student() = default;
-
-    Student(const std::string &nume,
-            const std::unordered_map<std::string,
-                int> &note)
-        : nume(nume),
-          note(note) {
-        std::cout << "constr init student " << nume << std::endl;
-    }
-
-
-    Student(const Student &other)
-        : nume(other.nume),
-          note(other.note),
-          an(other.an), id(other.id) {
-        std::cout << "cc student " << nume << std::endl;
-    }
-
-    Student &operator=(const Student &other) {
-        if (this == &other)
-            return *this;
-        nume = other.nume;
-        note = other.note;
-        an = other.an;
-        std::cout << "op= student " << nume << std::endl;
-        return *this;
-    }
-
-    ~Student() {
-        std::cout << "destr student " << nume << std::endl;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Student &student);
-
-    bool trece() {
-        for (const auto &[nume_materie, nota]: note) {
-            if (nota < 5)
-                return false;
-        }
-        an++;
-        return true;
-    }
-
-    std::ostream &operator<<(std::ostream &os) const {
-        os << "student " << nume << std::endl;
-        return os;
-    }
-};
-
-std::size_t hash_value(const Student &obj) {
-    std::size_t seed = 0x36E05842;
-    seed ^= (seed << 6) + (seed >> 2) + 0x1E6FF02C + std::hash<std::string>{}(obj.nume);
-    // seed ^= (seed << 6) + (seed >> 2) + 0x35E8E29B + std::hash{}(obj.note);
-    seed ^= (seed << 6) + (seed >> 2) + 0x1B9FFE06 + static_cast<std::size_t>(obj.an);
-    seed ^= (seed << 6) + (seed >> 2) + 0x751C4A44 + static_cast<std::size_t>(obj.id);
-    return seed;
-}
-class Profesor {
-    std::string nume;
-    std::vector<std::string> materii;
-public:
-    Profesor(const std::string &nume, const std::vector<std::string> &materii)
-        : nume(nume),
-          materii(materii) {
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Profesor &prof) {
-        os << "nume: " << prof.nume << " materii:\n";
-        for (const auto &materie: prof.materii) {
-            os << materie << "\n";
-        }
-        return os;
-    }
-};
-
-class Facultate {
-    std::string nume;
-    std::vector<Student> studenti;
-    std::vector<Profesor> profi;
-
-public:
-    Facultate() = default;
-
-    explicit Facultate(const std::string &nume)
-        : nume(nume) {
-    }
-
-    Facultate(const std::string &nume, const std::vector<Student> &studenti,
-              const std::vector<Profesor> &profi)
-        : nume(nume),
-          studenti(studenti),
-          profi(profi) {
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Facultate &facultate) {
-        os << "nume: " << facultate.nume << " studenti: ";
-        for (const auto &student: facultate.studenti) {
-            // student.trece();
-            os << student;
-        }
-        return os;
-    }
-};
-
-std::ostream &operator<<(std::ostream &os, const Student &student) {
-    os << student.nume << ":\n";
-    for (const auto &[materie, nota]: student.note) {
-        os << materie << ": " << nota << "\n";
-    }
-    os << std::endl;
-    return os;
-}
 
 int main() {
+    std::vector<int> v1{1, 2, 3}, v2 {1, 2, 3, 4};
+    if (v1 == v2) {
+        std::cout << "egali\n";
+    }
+    else {
+        std::cout << "nu\n";
+    }
     [[maybe_unused]] auto hsh = [](const Student &st) { return hash_value(st); };
     std::unordered_map<Student, int, decltype(hsh)> studenti;
     Student st1("abc", {{"oop", 10}}), st2{"def", {}};

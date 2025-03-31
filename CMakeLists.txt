@@ -51,6 +51,12 @@ include(cmake/CopyHelper.cmake)
 add_executable(${MAIN_EXECUTABLE_NAME}
     main.cpp
     generated/src/Helper.cpp
+        Student.cpp
+        Student.h
+        Profesor.cpp
+        Profesor.h
+        Facultate.cpp
+        Facultate.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
