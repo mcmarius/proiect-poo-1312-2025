@@ -8,13 +8,179 @@
 #include "Profesor.h"
 #include "Student.h"
 
+#include <iostream>
+
+#include <iostream>
+
+#include <iostream>
+#include <ostream>
+
+class Baza {
+private: // (1)
+    int x;
+    void f() { std::cout << "f\n"; }
+
+    virtual void afis(std::ostream &os) const {
+    }
+
+protected:
+    int y;
+    void g() { std::cout << "g\n"; }
+
+public:
+    Baza(int x_) : x(x_) {
+        std::cout << "Constructor Bază: " << x << "\n";
+        f();
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Baza &baza) {
+        os
+                << "x: " << baza.x
+                << " y: " << baza.y;
+        baza.afis(os);
+        os << "\n";
+        return os;
+    }
+};
+
+class Baza2 {
+};
+
+class Baza3 {
+};
+
+class Derivata : private Baza {
+public:
+    Derivata() : Baza(1) {
+        //x;
+        //f();
+        y;
+        g();
+        // std::cout << "Constructor 1 Derivată: " << x << "\n"; f();
+    }
+
+private:
+    int x1;
+
+    void f1() {
+    }
+
+protected:
+    int x2;
+
+    void g1() {
+    }
+
+public:
+    int x3;
+
+    void h1() {
+    }
+
+private:
+    void afis(std::ostream &os) const override {
+        const auto &derivata = *this;
+        os
+                << " x1: " << derivata.x1
+                << " x2: " << derivata.x2
+                << " x3: " << derivata.x3;
+    }
+
+public:
+    friend std::ostream &operator<<(std::ostream &os, const Derivata &obj) {
+        return
+    }
+
+    Derivata(int x_, int x1, int x2)
+        : Baza(x_),
+          x1(x1),
+          x2(x2) {
+    }
+};
+
+class Der2 : protected Derivata {
+    void f2() {
+        x2;
+        g1();
+        x3;
+        h1();
+    }
+
+    int q;
+
+public:
+    Der2() = default;
+
+    Der2(int x_, int x1, int x2, int q)
+        : Derivata(x_, x1, x2),
+          q(q) {
+    }
+};
+
+void k() {
+    Der2 d2;
+    // d2.h1();
+}
+
+class Curs {
+protected:
+    int nota_laborator{};
+    int nota_examen{};
+
+public:
+    virtual double nota_finala() const { return nota_examen; }
+
+    virtual ~Curs() = 0;
+};
+
+Curs::~Curs() = default;
+
+class CursObligatoriu : public Curs {
+    int bonus{};
+
+public:
+    double nota_finala() const override;
+};
+
+// double Curs::nota_finala() const {
+//     return (nota_examen * 0.6 + nota_laborator * 0.4) * 0.9 + 0.1;
+// }
+
+double CursObligatoriu::nota_finala() const {
+    return Curs::nota_finala() + bonus;
+}
+
+class CursOptional : public Curs {
+};
+
+
+class Baza1 {
+protected:
+    ~Baza1() {
+        std::cout << "Baza1::~Baza1()\n";
+    }
+};
+
+class Der1 : public Baza1 {
+public:
+    ~Der1() {
+        std::cout << "Der1::~Der1()\n";
+    }
+};
 
 int main() {
-    std::vector<int> v1{1, 2, 3}, v2 {1, 2, 3, 4};
+    Curs c1;
+    CursOptional opt;
+    //const Baza1& b1 = Der1{};
+    //Baza1* b1 = new Der1;
+    //delete b1;
+    Der1 d1;
+    return 0;
+    CursObligatoriu co;
+    std::vector<int> v1{1, 2, 3}, v2{1, 2, 3, 4};
     if (v1 == v2) {
         std::cout << "egali\n";
-    }
-    else {
+    } else {
         std::cout << "nu\n";
     }
     [[maybe_unused]] auto hsh = [](const Student &st) { return hash_value(st); };

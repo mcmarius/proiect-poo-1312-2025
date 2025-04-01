@@ -28,5 +28,4 @@ public:
 };
 
 
-
 #endif //FACULTATE_H

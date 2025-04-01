@@ -9,12 +9,12 @@ Facultate::Facultate(const std::string &nume): nume(nume) {
 }
 
 Facultate::Facultate(const std::string &nume, const std::vector<Student> &studenti,
-    const std::vector<Profesor> &profi): nume(nume),
-                                         studenti(studenti),
-                                         profi(profi) {
+                     const std::vector<Profesor> &profi): nume(nume),
+                                                          studenti(studenti),
+                                                          profi(profi) {
 }
 
-std::ostream & operator<<(std::ostream &os, const Facultate &facultate) {
+std::ostream &operator<<(std::ostream &os, const Facultate &facultate) {
     os << "nume: " << facultate.nume << " studenti: ";
     for (const auto &student: facultate.studenti) {
         // student.trece();

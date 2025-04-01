@@ -16,7 +16,7 @@ Student::Student(const Student &other): nume(other.nume),
     std::cout << "cc student " << nume << std::endl;
 }
 
-Student & Student::operator=(const Student &other) {
+Student &Student::operator=(const Student &other) {
     if (this == &other)
         return *this;
     nume = other.nume;
@@ -39,7 +39,7 @@ bool Student::trece() {
     return true;
 }
 
-std::ostream & Student::operator<<(std::ostream &os) const {
+std::ostream &Student::operator<<(std::ostream &os) const {
     os << "student " << nume << std::endl;
     return os;
 }
