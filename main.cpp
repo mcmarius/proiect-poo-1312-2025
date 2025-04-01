@@ -20,7 +20,7 @@ private: // (1)
     int x;
     void f() { std::cout << "f\n"; }
 
-    virtual void afis(std::ostream &os) const {
+    virtual void afis(std::ostream &) const {
     }
 
 protected:
@@ -54,7 +54,7 @@ public:
     Derivata() : Baza(1) {
         //x;
         //f();
-        y;
+        // y;
         g();
         // std::cout << "Constructor 1 Derivată: " << x << "\n"; f();
     }
