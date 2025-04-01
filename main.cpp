@@ -24,11 +24,11 @@ private: // (1)
     }
 
 protected:
-    int y;
+    int y{};
     void g() { std::cout << "g\n"; }
 
 public:
-    Baza(int x_) : x(x_) {
+    explicit Baza(int x_) : x(x_) {
         std::cout << "Constructor Bază: " << x << "\n";
         f();
     }
@@ -60,21 +60,23 @@ public:
     }
 
 private:
-    int x1;
+    int x1{};
 
     void f1() {
     }
 
 protected:
-    int x2;
+    int x2{};
 
     void g1() {
     }
 
 public:
-    int x3;
+    int x3{};
 
     void h1() {
+        f1();
+        g1();
     }
 
 private:
@@ -87,10 +89,6 @@ private:
     }
 
 public:
-    friend std::ostream &operator<<(std::ostream &os, const Derivata &obj) {
-        return
-    }
-
     Derivata(int x_, int x1, int x2)
         : Baza(x_),
           x1(x1),
@@ -100,13 +98,13 @@ public:
 
 class Der2 : protected Derivata {
     void f2() {
-        x2;
+        // x2;
         g1();
-        x3;
+        // x3;
         h1();
     }
 
-    int q;
+    [[maybe_unused]] int q{};
 
 public:
     Der2() = default;
@@ -114,6 +112,7 @@ public:
     Der2(int x_, int x1, int x2, int q)
         : Derivata(x_, x1, x2),
           q(q) {
+        f2();
     }
 };
 
@@ -169,20 +168,21 @@ public:
 };
 
 int main() {
-    Curs c1;
-    CursOptional opt;
+    // Curs c1;
+    // CursOptional opt;
     //const Baza1& b1 = Der1{};
     //Baza1* b1 = new Der1;
     //delete b1;
     Der1 d1;
-    return 0;
-    CursObligatoriu co;
-    std::vector<int> v1{1, 2, 3}, v2{1, 2, 3, 4};
-    if (v1 == v2) {
-        std::cout << "egali\n";
-    } else {
-        std::cout << "nu\n";
-    }
+    // return 0;
+    // CursObligatoriu co;
+    // std::vector<int> v1{1, 2, 3}, v2{1, 2, 3, 4};
+    // if (v1 == v2) {
+    //     std::cout << "egali\n";
+    // } else {
+    //     std::cout << "nu\n";
+    // }
+    k();
     [[maybe_unused]] auto hsh = [](const Student &st) { return hash_value(st); };
     std::unordered_map<Student, int, decltype(hsh)> studenti;
     Student st1("abc", {{"oop", 10}}), st2{"def", {}};
